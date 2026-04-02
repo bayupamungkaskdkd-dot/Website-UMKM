@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DapurKita — Kuliner UMKM Indonesia</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ── DESIGN TOKENS ─────────────────────────────────────── */
+    :root {
+      --cream:    #FDF6EE;
+      --warm-bg:  #FAF0E0;
+      --brown:    #3D1C02;
+      --amber:    #D4720B;
+      --amber-lt: #F5A623;
+      --red:      #C0392B;
+      --sage:     #5A7A5A;
+      --card-bg:  #FFFFFF;
+      --shadow:   0 8px 32px rgba(61,28,2,0.10);
+      --radius:   18px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--brown);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+
+    /* ── NAVBAR ────────────────────────────────────────────── */
+    .navbar {
+      background: rgba(253,246,238,0.88) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212,114,11,0.15);
+      padding: 14px 0;
+      position: sticky; top: 0; z-index: 999;
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem; font-weight: 900;
+      color: var(--brown) !important;
+      letter-spacing: -0.5px;
+    }
+    .navbar-brand span { color: var(--amber); }
+    .nav-link {
+      color: var(--brown) !important;
+      font-weight: 500; font-size: .9rem;
+      padding: 6px 14px !important;
+      border-radius: 30px;
+      transition: background .2s, color .2s;
+    }
+    .nav-link:hover { background: var(--amber); color: #fff !important; }
+    .btn-daftar {
+      background: var(--amber); color: #fff !important;
+      border-radius: 30px; font-weight: 600;
+      padding: 8px 22px !important;
+      box-shadow: 0 4px 14px rgba(212,114,11,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-daftar:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212,114,11,.45); }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    .hero {
+      min-height: 88vh;
+      background:
+        radial-gradient(ellipse at 70% 50%, rgba(245,166,35,.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(192,57,43,.10) 0%, transparent 50%),
+        var(--cream);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle cx='8' cy='8' r='1.5' fill='%23D4720B' fill-opacity='.08'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212,114,11,.12);
+      color: var(--amber);
+      border: 1px solid rgba(212,114,11,.25);
+      border-radius: 30px;
+      padding: 6px 18px;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .8px; text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .hero h1 { font-size: clamp(2.4rem, 5.5vw, 4.2rem); line-height: 1.12; margin-bottom: 22px; }
+    .hero h1 em { color: var(--amber); font-style: normal; }
+    .hero p { font-size: 1.1rem; color: rgba(61,28,2,.7); max-width: 480px; line-height: 1.7; }
+
+    .btn-primary-custom {
+      background: var(--brown); color: #fff;
+      border-radius: 30px; font-weight: 600;
+      padding: 14px 32px; font-size: 1rem;
+      border: none; box-shadow: 0 6px 20px rgba(61,28,2,.25);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary-custom:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(61,28,2,.3); }
+    .btn-outline-custom {
+      background: transparent; color: var(--brown);
+      border: 2px solid var(--brown);
+      border-radius: 30px; font-weight: 600;
+      padding: 13px 30px; font-size: 1rem;
+      transition: background .2s, color .2s;
+    }
+    .btn-outline-custom:hover { background: var(--brown); color: #fff; }
+
+    /* floating food emoji */
+    .float-food {
+      position: absolute; font-size: 3.5rem;
+      opacity: .18; user-select: none; pointer-events: none;
+      animation: floatY 6s ease-in-out infinite;
+    }
+    .float-food:nth-child(1)  { top: 12%; right: 8%;  animation-delay: 0s; }
+    .float-food:nth-child(2)  { top: 55%; right: 18%; animation-delay: 1.5s; font-size:2.5rem; }
+    .float-food:nth-child(3)  { top: 25%; right: 28%; animation-delay: 3s;  font-size:4.5rem; }
+    .float-food:nth-child(4)  { bottom:12%; right:6%; animation-delay: 2s; }
+    @keyframes floatY {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-18px); }
+    }
+
+    /* hero visual card */
+    .hero-visual {
+      position: relative;
+    }
+    .hero-img-wrap {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(61,28,2,.2);
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #F5A623 0%, #C0392B 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-img-wrap .food-showcase { font-size: 8rem; }
+    .hero-stat {
+      position: absolute; background: #fff;
+      border-radius: 16px; padding: 14px 20px;
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 12px;
+      animation: floatY 5s ease-in-out infinite;
+    }
+    .hero-stat.s1 { bottom: -16px; left: -24px; animation-delay: 0.5s; }
+    .hero-stat.s2 { top: -16px; right: -20px; animation-delay: 2s; }
+    .hero-stat .num { font-family: 'Playfair Display',serif; font-size: 1.6rem; font-weight: 900; color: var(--amber); }
+    .hero-stat .lbl { font-size: .75rem; color: rgba(61,28,2,.6); }
+
+    /* ── STATS BAR ─────────────────────────────────────────── */
+    .stats-bar {
+      background: var(--brown);
+      padding: 40px 0;
+    }
+    .stat-item { text-align: center; }
+    .stat-item .big { font-family: 'Playfair Display',serif; font-size: 2.4rem; font-weight: 900; color: var(--amber-lt); }
+    .stat-item .label { font-size: .85rem; color: rgba(255,255,255,.7); margin-top: 4px; }
+    .stat-divider { width: 1px; background: rgba(255,255,255,.12); }
+
+    /* ── SECTIONS ──────────────────────────────────────────── */
+    section { padding: 90px 0; }
+    .section-badge {
+      display: inline-block; background: rgba(212,114,11,.12);
+      color: var(--amber); border-radius: 30px;
+      padding: 4px 16px; font-size: .75rem; font-weight: 600;
+      letter-spacing: .8px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title { font-size: clamp(1.8rem,3.5vw,2.8rem); line-height:1.2; margin-bottom: 16px; }
+    .section-sub { color: rgba(61,28,2,.65); font-size: 1rem; line-height: 1.7; }
+
+    /* ── HOW IT WORKS ──────────────────────────────────────── */
+    #cara-kerja { background: var(--warm-bg); }
+    .step-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      transition: transform .3s, box-shadow .3s;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .step-card::before {
+      content: attr(data-num);
+      position: absolute; top: -10px; right: 14px;
+      font-family: 'Playfair Display',serif;
+      font-size: 5rem; font-weight: 900;
+      color: rgba(212,114,11,.07);
+      line-height: 1;
+    }
+    .step-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(61,28,2,.14); }
+    .step-icon {
+      width: 56px; height: 56px;
+      background: rgba(212,114,11,.12);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 20px;
+    }
+    .step-card h5 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .step-card p  { font-size: .9rem; color: rgba(61,28,2,.65); line-height: 1.65; }
+
+    /* ── FOOD CARDS ────────────────────────────────────────── */
+    .food-card {
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+    }
+    .food-card:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(61,28,2,.15); }
+    .food-img {
+      height: 180px;
+      background: linear-gradient(135deg, #F5A623, #C0392B);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      position: relative;
+    }
+    .food-badge-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: #fff; border-radius: 20px;
+      padding: 3px 12px; font-size: .72rem; font-weight: 600;
+      color: var(--amber);
+    }
+    .food-body { padding: 20px; }
+    .food-body h6 { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .food-seller { font-size: .8rem; color: rgba(61,28,2,.55); margin-bottom: 12px; }
+    .food-seller i { color: var(--sage); }
+    .food-price { font-family: 'Playfair Display',serif; font-size: 1.3rem; font-weight: 700; color: var(--amber); }
+    .food-rating { font-size: .8rem; color: rgba(61,28,2,.5); }
+    .food-rating i { color: #F5A623; }
+    .food-rating span { color: var(--brown); font-weight: 600; }
+
+    /* gradient overlays per card */
+    .fc-1 .food-img { background: linear-gradient(135deg, #FF6B35, #F7C59F); }
+    .fc-2 .food-img { background: linear-gradient(135deg, #2C7873, #6FB98F); }
+    .fc-3 .food-img { background: linear-gradient(135deg, #C0392B, #E74C3C); }
+    .fc-4 .food-img { background: linear-gradient(135deg, #8B4513, #D2691E); }
+    .fc-5 .food-img { background: linear-gradient(135deg, #FF6348, #FF4757); }
+    .fc-6 .food-img { background: linear-gradient(135deg, #5352ED, #2F3542); }
+
+    /* ── FEATURES ──────────────────────────────────────────── */
+    #fitur { background: var(--brown); }
+    #fitur .section-title  { color: #fff; }
+    #fitur .section-sub    { color: rgba(255,255,255,.6); }
+    #fitur .section-badge  { background: rgba(245,166,35,.15); color: var(--amber-lt); }
+    .feat-card {
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 32px 26px;
+      background: rgba(255,255,255,.04);
+      transition: background .3s, transform .3s;
+      height: 100%;
+    }
+    .feat-card:hover { background: rgba(255,255,255,.09); transform: translateY(-4px); }
+    .feat-icon {
+      width: 52px; height: 52px;
+      background: rgba(245,166,35,.15);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 18px;
+    }
+    .feat-card h5 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .feat-card p  { font-size: .87rem; color: rgba(255,255,255,.55); line-height: 1.65; }
+
+    /* ── TESTIMONIALS ──────────────────────────────────────── */
+    #testimoni { background: var(--warm-bg); }
+    .testi-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      height: 100%;
+      position: relative;
+    }
+    .testi-card::before {
+      content: '"';
+      font-family: 'Playfair Display',serif;
+      font-size: 6rem; line-height: .8;
+      color: rgba(212,114,11,.12);
+      position: absolute; top: 16px; left: 22px;
+    }
+    .testi-stars i { color: #F5A623; font-size: .9rem; }
+    .testi-text { font-size: .92rem; line-height: 1.7; color: rgba(61,28,2,.75); margin: 14px 0 20px; }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--amber), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .testi-name { font-weight: 700; font-size: .9rem; }
+    .testi-role { font-size: .78rem; color: rgba(61,28,2,.5); }
+
+    /* ── REGISTER CTA ──────────────────────────────────────── */
+    #daftar {
+      background: linear-gradient(135deg, var(--amber) 0%, var(--red) 100%);
+      position: relative; overflow: hidden;
+    }
+    #daftar::before {
+      content:'';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='white' fill-opacity='.08'/%3E%3C/svg%3E");
+    }
+    #daftar .section-title { color: #fff; }
+    #daftar p { color: rgba(255,255,255,.8); }
+    .form-control-custom {
+      border-radius: 30px; padding: 13px 22px;
+      border: 2px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.15);
+      color: #fff; font-size: .95rem;
+    }
+    .form-control-custom::placeholder { color: rgba(255,255,255,.6); }
+    .form-control-custom:focus {
+      outline: none; border-color: #fff;
+      background: rgba(255,255,255,.22);
+      color: #fff; box-shadow: none;
+    }
+    select.form-control-custom option { color: var(--brown); background: #fff; }
+    .btn-white {
+      background: #fff; color: var(--amber);
+      border-radius: 30px; font-weight: 700;
+      padding: 13px 34px; border: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,.15);
+      transition: transform .2s, box-shadow .2s;
+      font-size: .95rem;
+    }
+    .btn-white:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.2); color: var(--red); }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer {
+      background: var(--brown);
+      color: rgba(255,255,255,.65);
+      padding: 64px 0 28px;
+    }
+    footer .brand { font-family: 'Playfair Display',serif; font-size: 1.8rem; font-weight: 900; color: #fff; }
+    footer .brand span { color: var(--amber-lt); }
+    footer p { font-size: .88rem; line-height: 1.7; }
+    footer h6 { color: #fff; font-weight: 700; margin-bottom: 18px; font-size: .9rem; letter-spacing: .5px; text-transform: uppercase; }
+    footer ul { list-style: none; padding: 0; }
+    footer ul li { margin-bottom: 9px; }
+    footer ul li a { color: rgba(255,255,255,.55); text-decoration: none; font-size: .88rem; transition: color .2s; }
+    footer ul li a:hover { color: var(--amber-lt); }
+    .footer-divider { border-color: rgba(255,255,255,.1); margin: 40px 0 24px; }
+    .footer-bottom { font-size: .8rem; }
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.6); font-size: 1rem;
+      text-decoration: none; margin-right: 8px;
+      transition: background .2s, color .2s;
+    }
+    .social-link:hover { background: var(--amber); color: #fff; border-color: var(--amber); }
+
+    /* ── TOAST ─────────────────────────────────────────────── */
+    #toast-box {
+      position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+    }
+    .my-toast {
+      background: var(--brown); color: #fff;
+      border-radius: 14px; padding: 14px 22px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.2);
+      font-size: .9rem; display: flex; align-items: center; gap: 10px;
+      animation: slideIn .35s ease;
+    }
+    @keyframes slideIn { from { transform: translateX(80px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+    /* ── SEARCH BAR ────────────────────────────────────────── */
+    .search-wrap {
+      background: #fff;
+      border-radius: 50px;
+      padding: 6px 6px 6px 24px;
+      box-shadow: 0 8px 32px rgba(61,28,2,.12);
+      display: flex; align-items: center; gap: 10px;
+      max-width: 540px;
+    }
+    .search-wrap input {
+      border: none; outline: none; background: transparent;
+      font-size: .95rem; color: var(--brown); flex: 1;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .search-wrap input::placeholder { color: rgba(61,28,2,.4); }
+    .search-wrap button {
+      background: var(--amber); color: #fff;
+      border: none; border-radius: 40px;
+      padding: 10px 22px; font-weight: 600; font-size: .9rem;
+      transition: background .2s;
+    }
+    .search-wrap button:hover { background: var(--red); }
+
+    /* responsive */
+    @media(max-width:768px) {
+      .hero { padding: 60px 0 80px; }
+      .hero-visual { margin-top: 50px; }
+      .hero-stat.s1 { left: 0; }
+      .hero-stat.s2 { right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ═══════════════════════════════════════════════ -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">Dapur<span>Kita</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <i class="bi bi-list fs-4" style="color:var(--brown)"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav mx-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="#kuliner">Kuliner</a></li>
+        <li class="nav-item"><a class="nav-link" href="#cara-kerja">Cara Kerja</a></li>
+        <li class="nav-item"><a class="nav-link" href="#fitur">Fitur</a></li>
+        <li class="nav-item"><a class="nav-link" href="#testimoni">Testimoni</a></li>
+      </ul>
+      <a href="#daftar" class="nav-link btn-daftar ms-2">Daftar UMKM</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════ -->
+<section class="hero">
+  <!-- floating emojis -->
+  <div class="float-food">🍜</div>
+  <div class="float-food">🌶️</div>
+  <div class="float-food">🍛</div>
+  <div class="float-food">🥘</div>
+
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <div class="hero-badge"><i class="bi bi-stars me-1"></i> Platform UMKM Kuliner Indonesia</div>
+        <h1>Bawa Cita Rasa Dapur Anda ke <em>Lebih Banyak Meja</em></h1>
+        <p class="mt-3 mb-4">Platform digital gratis untuk UMKM kuliner lokal — buka toko online, jangkau pelanggan baru, dan kembangkan bisnis makanan Anda tanpa ribet.</p>
+
+        <!-- search -->
+        <div class="search-wrap mb-4">
+          <i class="bi bi-search" style="color:var(--amber)"></i>
+          <input type="text" id="searchInput" placeholder="Cari nasi goreng, bakso, rendang…" />
+          <button onclick="handleSearch()">Cari</button>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#daftar" class="btn-primary-custom text-decoration-none">
+            <i class="bi bi-shop me-2"></i>Daftarkan UMKM Saya
+          </a>
+          <a href="#kuliner" class="btn-outline-custom text-decoration-none">
+            <i class="bi bi-grid me-2"></i>Jelajahi Kuliner
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-5 offset-lg-1">
+        <div class="hero-visual">
+          <div class="hero-img-wrap">
+            <span class="food-showcase">🍜</span>
+          </div>
+          <div class="hero-stat s1">
+            <div class="num">2.4K+</div>
+            <div class="lbl">UMKM Terdaftar</div>
+          </div>
+          <div class="hero-stat s2">
+            <div>
+              <div class="num">⭐ 4.9</div>
+              <div class="lbl">Rating Rata-rata</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS BAR ═════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="row align-items-center text-center gy-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="big">2.4K+</div>
+          <div class="label">UMKM Aktif</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="big">18K+</div>
+          <div class="label">Pembeli Terdaftar</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="big">95K+</div>
+          <div class="label">Pesanan Berhasil</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="big">34</div>
+          <div class="label">Kota di Indonesia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ KULINER SHOWCASE ══════════════════════════════════════ -->
+<section id="kuliner">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">🍽️ Menu Unggulan</div>
+      <h2 class="section-title">Kuliner Terbaik dari Dapur Lokal</h2>
+      <p class="section-sub mx-auto" style="max-width:500px">Temukan ratusan menu autentik dari UMKM di sekitar Anda — buatan tangan, penuh cinta.</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-5" id="filterTabs">
+      <button class="filter-btn active" data-cat="semua">Semua</button>
+      <button class="filter-btn" data-cat="nasi">Nasi & Lauk</button>
+      <button class="filter-btn" data-cat="mie">Mie & Bakso</button>
+      <button class="filter-btn" data-cat="snack">Snack & Jajanan</button>
+      <button class="filter-btn" data-cat="minuman">Minuman</button>
+    </div>
+
+    <style>
+      .filter-btn {
+        border: 2px solid rgba(212,114,11,.25);
+        border-radius: 30px; background: #fff;
+        color: var(--brown); font-weight: 500;
+        padding: 8px 20px; font-size: .88rem;
+        cursor: pointer; transition: all .2s;
+        font-family: 'DM Sans', sans-serif;
+      }
+      .filter-btn.active, .filter-btn:hover {
+        background: var(--amber); color: #fff; border-color: var(--amber);
+      }
+    </style>
+
+    <div class="row g-4" id="foodGrid">
+      <!-- card 1 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="nasi">
+        <div class="food-card fc-1" onclick="addToWishlist('Nasi Goreng Spesial')">
+          <div class="food-img">
+            🍳
+            <span class="food-badge-tag">🔥 Terlaris</span>
+          </div>
+          <div class="food-body">
+            <h6>Nasi Goreng Spesial Kampung</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Dapur Bu Siti — Surabaya</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 18.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>4.9</span> (231)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card 2 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="nasi">
+        <div class="food-card fc-2" onclick="addToWishlist('Sayur Lodeh Tempel')">
+          <div class="food-img">
+            🥘
+            <span class="food-badge-tag">✅ Halal</span>
+          </div>
+          <div class="food-body">
+            <h6>Sayur Lodeh Tempel Legendaris</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Warung Mbah Jem — Jogja</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 12.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>4.8</span> (189)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card 3 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="nasi">
+        <div class="food-card fc-3" onclick="addToWishlist('Rendang Padang Asli')">
+          <div class="food-img">
+            🍖
+            <span class="food-badge-tag">⭐ Top</span>
+          </div>
+          <div class="food-body">
+            <h6>Rendang Padang Asli</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Rumah Makan Minang — Bandung</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 25.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>5.0</span> (412)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card 4 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="mie">
+        <div class="food-card fc-4" onclick="addToWishlist('Bakso Solo Mercon')">
+          <div class="food-img">
+            🍢
+            <span class="food-badge-tag">🆕 Baru</span>
+          </div>
+          <div class="food-body">
+            <h6>Bakso Solo Mercon</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Pak Agus Bakso — Solo</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 15.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>4.7</span> (98)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card 5 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="snack">
+        <div class="food-card fc-5" onclick="addToWishlist('Gorengan Campur Crispy')">
+          <div class="food-img">
+            🧆
+            <span class="food-badge-tag">💰 Hemat</span>
+          </div>
+          <div class="food-body">
+            <h6>Gorengan Campur Crispy</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Teh Rini Snack — Malang</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 5.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>4.6</span> (320)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card 6 -->
+      <div class="col-sm-6 col-md-4 col-lg-4 food-item" data-cat="minuman">
+        <div class="food-card fc-6" onclick="addToWishlist('Es Dawet Ayu')">
+          <div class="food-img">
+            🧋
+            <span class="food-badge-tag">❄️ Segar</span>
+          </div>
+          <div class="food-body">
+            <h6>Es Dawet Ayu Khas Banjarnegara</h6>
+            <div class="food-seller"><i class="bi bi-shop-window me-1"></i>Mbok Darmi — Purwokerto</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="food-price">Rp 8.000</div>
+              <div class="food-rating"><i class="bi bi-star-fill"></i> <span>4.8</span> (145)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <button class="btn-outline-custom" onclick="showToast('Memuat lebih banyak kuliner…')">
+        <i class="bi bi-grid-3x3-gap me-2"></i>Lihat Semua Menu
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════ -->
+<section id="cara-kerja">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">🗺️ Alur Platform</div>
+      <h2 class="section-title">Cara Kerja DapurKita</h2>
+      <p class="section-sub mx-auto" style="max-width:480px">Empat langkah mudah untuk UMKM Anda mulai berkembang secara digital.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="step-card" data-num="1">
+          <div class="step-icon">📝</div>
+          <h5>Daftar Gratis</h5>
+          <p>Isi formulir pendaftaran UMKM Anda. Proses verifikasi cepat, tanpa biaya apapun.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="step-card" data-num="2">
+          <div class="step-icon">📸</div>
+          <h5>Unggah Menu</h5>
+          <p>Upload foto dan deskripsi menu makanan Anda. Semakin menarik, semakin banyak pembeli.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="step-card" data-num="3">
+          <div class="step-icon">📢</div>
+          <h5>Jangkau Pelanggan</h5>
+          <p>Toko Anda otomatis tampil di pencarian. Kami bantu promosi lewat media sosial & notifikasi.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="step-card" data-num="4">
+          <div class="step-icon">💰</div>
+          <h5>Terima Pesanan</h5>
+          <p>Kelola pesanan lewat dashboard, terima pembayaran digital, dan catat omzet dengan mudah.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══════════════════════════════════════════════ -->
+<section id="fitur">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-4">
+        <div class="section-badge">✨ Fitur Lengkap</div>
+        <h2 class="section-title">Semua yang Anda Butuhkan, dalam Satu Platform</h2>
+        <p class="section-sub">Dari toko online hingga laporan penjualan — kami siapkan semua untuk UMKM Anda tumbuh lebih cepat.</p>
+        <a href="#daftar" class="btn-white mt-4 d-inline-block text-decoration-none">
+          Mulai Sekarang <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+      <div class="col-lg-8">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">🏪</div>
+              <h5>Toko Online Gratis</h5>
+              <p>Halaman toko profesional dengan foto, menu, dan kontak WhatsApp langsung.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">📊</div>
+              <h5>Dashboard Penjualan</h5>
+              <p>Pantau pesanan, omzet harian, dan produk terlaris dalam satu layar.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">🔔</div>
+              <h5>Notifikasi Pesanan</h5>
+              <p>Terima pemberitahuan pesanan baru lewat WhatsApp & email secara real-time.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">📍</div>
+              <h5>Pencarian Berbasis Lokasi</h5>
+              <p>Pembeli di dekat Anda otomatis menemukan toko Anda lebih dulu.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">⭐</div>
+              <h5>Sistem Rating & Ulasan</h5>
+              <p>Bangun reputasi positif lewat ulasan pelanggan yang terverifikasi.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card">
+              <div class="feat-icon">💳</div>
+              <h5>Pembayaran Digital</h5>
+              <p>Terima QRIS, transfer bank, dan e-wallet tanpa ribet setup sendiri.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONI ═════════════════════════════════════════════ -->
+<section id="testimoni">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">💬 Cerita Sukses</div>
+      <h2 class="section-title">Apa Kata UMKM & Pembeli</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="testi-card">
+          <div class="testi-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+          <p class="testi-text">Dulu cuma jualan di depan rumah, sekarang sehari bisa 30–40 pesanan masuk lewat DapurKita. Omzet naik 3× dalam 2 bulan!</p>
+          <div class="d-flex align-items-center">
+            <div class="testi-avatar">👩</div>
+            <div>
+              <div class="testi-name">Bu Siti Rahayu</div>
+              <div class="testi-role">Pemilik Dapur Bu Siti, Surabaya</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testi-card">
+          <div class="testi-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+          <p class="testi-text">Enak banget nemuin makanan rumahan di sini! Bisa lihat foto, baca ulasan, langsung chat penjual. Benar-benar bantu saya makan sehat & hemat.</p>
+          <div class="d-flex align-items-center">
+            <div class="testi-avatar">👨</div>
+            <div>
+              <div class="testi-name">Rizky Firmansyah</div>
+              <div class="testi-role">Pelanggan, Bandung</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testi-card">
+          <div class="testi-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half-fill"></i></div>
+          <p class="testi-text">Fitur QRIS-nya memudahkan sekali. Pelanggan nggak perlu tunai, saya juga nggak repot kembalian. Profesional tapi tetap ramah untuk pelaku usaha kecil.</p>
+          <div class="d-flex align-items-center">
+            <div class="testi-avatar">👴</div>
+            <div>
+              <div class="testi-name">Pak Agus Wibowo</div>
+              <div class="testi-role">Pemilik Bakso Solo Mercon</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REGISTER CTA ══════════════════════════════════════════ -->
+<section id="daftar">
+  <div class="container position-relative">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-7">
+        <h2 class="section-title">Siap Bawa Kuliner Anda ke Level Berikutnya?</h2>
+        <p class="mt-3 fs-5">Daftarkan UMKM Anda sekarang — gratis, cepat, tanpa kartu kredit.</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="p-4 p-md-5" style="background:rgba(255,255,255,.1);border-radius:24px;border:1px solid rgba(255,255,255,.2)">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <input id="f-nama" class="form-control form-control-custom w-100" placeholder="Nama Pemilik UMKM" type="text"/>
+            </div>
+            <div class="col-md-6">
+              <input id="f-usaha" class="form-control form-control-custom w-100" placeholder="Nama Usaha Kuliner" type="text"/>
+            </div>
+            <div class="col-md-6">
+              <input id="f-hp" class="form-control form-control-custom w-100" placeholder="No. WhatsApp Aktif" type="tel"/>
+            </div>
+            <div class="col-md-6">
+              <select id="f-kota" class="form-control form-control-custom w-100">
+                <option value="" disabled selected>Pilih Kota</option>
+                <option>Surabaya</option><option>Jakarta</option><option>Bandung</option>
+                <option>Yogyakarta</option><option>Solo</option><option>Malang</option>
+                <option>Semarang</option><option>Medan</option><option>Makassar</option>
+                <option>Kota lainnya</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <select id="f-cat" class="form-control form-control-custom w-100">
+                <option value="" disabled selected>Jenis Kuliner</option>
+                <option>Nasi & Lauk Pauk</option><option>Mie & Bakso</option>
+                <option>Kue & Jajanan Tradisional</option><option>Minuman & Jus</option>
+                <option>Seafood</option><option>Ayam & Bebek</option><option>Lainnya</option>
+              </select>
+            </div>
+            <div class="col-12 text-center mt-2">
+              <button class="btn-white px-5 py-3 fs-5" onclick="submitForm()">
+                <i class="bi bi-rocket-takeoff me-2"></i>Daftar Sekarang — Gratis!
+              </button>
+            </div>
+          </div>
+          <p class="text-center mt-3" style="color:rgba(255,255,255,.6);font-size:.82rem">
+            <i class="bi bi-shield-check me-1"></i>Data Anda aman. Tidak ada spam. Mulai berjualan dalam 24 jam.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row gy-5">
+      <div class="col-lg-4">
+        <div class="brand">Dapur<span>Kita</span></div>
+        <p class="mt-3" style="max-width:300px">Platform digital UMKM kuliner Indonesia — menghubungkan cita rasa lokal dengan jutaan pembeli.</p>
+        <div class="mt-4">
+          <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-tiktok"></i></a>
+          <a href="#" class="social-link"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <h6>Platform</h6>
+        <ul>
+          <li><a href="#kuliner">Jelajahi Kuliner</a></li>
+          <li><a href="#daftar">Daftarkan UMKM</a></li>
+          <li><a href="#">Dashboard Penjual</a></li>
+          <li><a href="#">Cara Pembayaran</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <h6>Perusahaan</h6>
+        <ul>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Blog & Tips UMKM</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="#">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3">
+        <h6>Newsletter UMKM</h6>
+        <p style="font-size:.85rem;margin-bottom:14px">Dapatkan tips jualan & info promo gratis setiap minggu.</p>
+        <div class="d-flex gap-2">
+          <input type="email" placeholder="Email Anda" class="form-control" style="border-radius:30px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:.85rem" />
+          <button class="btn" onclick="showToast('Berhasil subscribe newsletter!')" style="background:var(--amber-lt);color:var(--brown);border-radius:30px;font-weight:700;white-space:nowrap;padding:8px 18px">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider"/>
+    <div class="d-flex flex-wrap justify-content-between align-items-center footer-bottom gap-3">
+      <span>© 2025 DapurKita. Semua hak dilindungi.</span>
+      <div class="d-flex gap-3">
+        <a href="#" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.8rem">Kebijakan Privasi</a>
+        <a href="#" style="color:rgba(255,255,255,.4);text-decoration:none;font-size:.8rem">Syarat & Ketentuan</a>
+      </div>
+      <span>🇮🇩 Dibuat dengan ❤️ untuk UMKM Indonesia</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ TOAST ═════════════════════════════════════════════════ -->
+<div id="toast-box"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ── TOAST ─────────────────────────────────── */
+  function showToast(msg, emoji = '✅') {
+    const box = document.getElementById('toast-box');
+    const t = document.createElement('div');
+    t.className = 'my-toast';
+    t.innerHTML = `<span style="font-size:1.3rem">${emoji}</span> ${msg}`;
+    box.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  /* ── WISHLIST ──────────────────────────────── */
+  function addToWishlist(name) {
+    showToast(`"${name}" ditambahkan ke favorit!`, '❤️');
+  }
+
+  /* ── FILTER TABS ───────────────────────────── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const cat = this.dataset.cat;
+      document.querySelectorAll('.food-item').forEach(item => {
+        if (cat === 'semua' || item.dataset.cat === cat) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  /* ── SEARCH ────────────────────────────────── */
+  function handleSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) return;
+    showToast(`Mencari: "${q}"…`, '🔍');
+    document.getElementById('searchInput').value = '';
+    document.querySelector('#kuliner').scrollIntoView({ behavior: 'smooth' });
+  }
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  /* ── FORM SUBMIT ───────────────────────────── */
+  function submitForm() {
+    const nama  = document.getElementById('f-nama').value.trim();
+    const usaha = document.getElementById('f-usaha').value.trim();
+    const hp    = document.getElementById('f-hp').value.trim();
+    const kota  = document.getElementById('f-kota').value;
+    if (!nama || !usaha || !hp || !kota) {
+      showToast('Lengkapi semua data ya!', '⚠️'); return;
+    }
+    showToast(`Selamat datang, ${nama}! UMKM Anda segera aktif 🎉`, '🚀');
+    ['f-nama','f-usaha','f-hp'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-kota').selectedIndex = 0;
+    document.getElementById('f-cat').selectedIndex = 0;
+  }
+
+  /* ── SCROLL REVEAL (simple) ────────────────── */
+  const revealTargets = document.querySelectorAll('.step-card, .feat-card, .food-card, .testi-card');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+  revealTargets.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(28px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
